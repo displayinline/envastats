@@ -1,0 +1,464 @@
+{
+	"extensionName": {
+		"message": "Envastats",
+		"description": "Name of the extension"
+	},
+	"extensionDesc": {
+		"message": "Statistiques détaillées de vos ventes sur les sites Envato",
+		"description": "Description of the extension for the extensions page"
+	},
+
+	"thousands_sep": {
+		"message": " ",
+		"description": "Thousands separator in formatted numbers"
+	},
+	"dec_point": {
+		"message": ",",
+		"description": "Decimal point in formatter numbers"
+	},
+	"currency_display": {
+		"message": "{amount} {symbol}",
+		"description": "Currency format, available placeholders: {currency}, {symbol}, {amount}"
+	},
+
+	"dateFormat_default": {
+		"message": "D d M Y H:i:s",
+		"description": "Date format - Complet default date format"
+	},
+	"dateFormat_shortDate": {
+		"message": "d/m/Y",
+		"description": "Date format - Short date"
+	},
+	"dateFormat_mediumDate": {
+		"message": "j M Y",
+		"description": "Date format - Medium date, with short month name"
+	},
+	"dateFormat_longDate": {
+		"message": "j F Y",
+		"description": "Date format - Long date, with full month name"
+	},
+	"dateFormat_fullDate": {
+		"message": "l j F Y",
+		"description": "Date format - Full format, with day name and month name"
+	},
+	"dateFormat_week": {
+		"message": "\\S\\e\\m\\a\\i\\n\\e W \\d\\e Y",
+		"description": "Date format - Week number and year"
+	},
+	"dateFormat_month": {
+		"message": "F Y",
+		"description": "Date format - Month and year"
+	},
+
+	"months_January": {
+		"message": "Janvier",
+		"description": "Full month name - January"
+	},
+	"months_February": {
+		"message": "Février",
+		"description": "Full month name - February"
+	},
+	"months_March": {
+		"message": "Mars",
+		"description": "Full month name - March"
+	},
+	"months_April": {
+		"message": "Avril",
+		"description": "Full month name - April"
+	},
+	"months_May": {
+		"message": "Mai",
+		"description": "Full month name - May"
+	},
+	"months_June": {
+		"message": "Juin",
+		"description": "Full month name - June"
+	},
+	"months_July": {
+		"message": "Juillet",
+		"description": "Full month name - July"
+	},
+	"months_August": {
+		"message": "Août",
+		"description": "Full month name - August"
+	},
+	"months_September": {
+		"message": "Septembre",
+		"description": "Full month name - September"
+	},
+	"months_October": {
+		"message": "Octobre",
+		"description": "Full month name - October"
+	},
+	"months_November": {
+		"message": "Novembre",
+		"description": "Full month name - November"
+	},
+	"months_December": {
+		"message": "Décembre",
+		"description": "Full month name - December"
+	},
+	"monthsShort_January": {
+		"message": "Jan",
+		"description": "Short month name - January"
+	},
+	"monthsShort_February": {
+		"message": "Fév",
+		"description": "Short month name - February"
+	},
+	"monthsShort_March": {
+		"message": "Mar",
+		"description": "Short month name - March"
+	},
+	"monthsShort_April": {
+		"message": "Avr",
+		"description": "Short month name - April"
+	},
+	"monthsShort_May": {
+		"message": "Mai",
+		"description": "Short month name - May"
+	},
+	"monthsShort_June": {
+		"message": "Juin",
+		"description": "Short month name - June"
+	},
+	"monthsShort_July": {
+		"message": "Juil",
+		"description": "Short month name - July"
+	},
+	"monthsShort_August": {
+		"message": "Aou",
+		"description": "Short month name - August"
+	},
+	"monthsShort_September": {
+		"message": "Sep",
+		"description": "Short month name - September"
+	},
+	"monthsShort_October": {
+		"message": "Oct",
+		"description": "Short month name - October"
+	},
+	"monthsShort_November": {
+		"message": "Nov",
+		"description": "Short month name - November"
+	},
+	"monthsShort_December": {
+		"message": "Déc",
+		"description": "Short month name - December"
+	},
+	"days_Sunday": {
+		"message": "Dimanche",
+		"description": "Full day name - Sunday"
+	},
+	"days_Monday": {
+		"message": "Lundi",
+		"description": "Full day name - Monday"
+	},
+	"days_Tuesday": {
+		"message": "Mardi",
+		"description": "Full day name - Tuesday"
+	},
+	"days_Wednesday": {
+		"message": "Mercredi",
+		"description": "Full day name - Wednesday"
+	},
+	"days_Thursday": {
+		"message": "Jeudi",
+		"description": "Full day name - Thursday"
+	},
+	"days_Friday": {
+		"message": "Vendredi",
+		"description": "Full day name - Friday"
+	},
+	"days_Saturday": {
+		"message": "Samedi",
+		"description": "Full day name - Saturday"
+	},
+	"daysShort_Sunday": {
+		"message": "Dim",
+		"description": "Short day name - Sunday"
+	},
+	"daysShort_Monday": {
+		"message": "Lun",
+		"description": "Short day name - Monday"
+	},
+	"daysShort_Tuesday": {
+		"message": "Mar",
+		"description": "Short day name - Tuesday"
+	},
+	"daysShort_Wednesday": {
+		"message": "Mer",
+		"description": "Short day name - Wednesday"
+	},
+	"daysShort_Thursday": {
+		"message": "Jeu",
+		"description": "Short day name - Thursday"
+	},
+	"daysShort_Friday": {
+		"message": "Ven",
+		"description": "Short day name - Friday"
+	},
+	"daysShort_Saturday": {
+		"message": "Sam",
+		"description": "Short day name - Saturday"
+	},
+	"daysLetter_Sunday": {
+		"message": "D",
+		"description": "First letter of day name - Sunday"
+	},
+	"daysLetter_Monday": {
+		"message": "L",
+		"description": "First letter of day name - Monday"
+	},
+	"daysLetter_Tuesday": {
+		"message": "M",
+		"description": "First letter of day name - Tuesday"
+	},
+	"daysLetter_Wednesday": {
+		"message": "M",
+		"description": "First letter of day name - Wednesday"
+	},
+	"daysLetter_Thursday": {
+		"message": "J",
+		"description": "First letter of day name - Thursday"
+	},
+	"daysLetter_Friday": {
+		"message": "V",
+		"description": "First letter of day name - Friday"
+	},
+	"daysLetter_Saturday": {
+		"message": "S",
+		"description": "First letter of day name - Saturday"
+	},
+
+	"ready": {
+		"message": "Prêt",
+		"description": "Message when an widget is ready"
+	},
+	"ok": {
+		"message": "Ok",
+		"description": "Text on submit button to save form"
+	},
+	"cancel": {
+		"message": "Annuler",
+		"description": "Text of cancel link/button"
+	},
+	"save": {
+		"message": "Choisir",
+		"description": "Text of save button when choosing a currency"
+	},
+	"loadingDatabase": {
+		"message": "Chargement de la base de données...",
+		"description": "Message on the init screen, when loading database for the first time"
+	},
+	"errorInitDatabase": {
+		"message": "Erreur lors de l'initialisation de la base de données",
+		"description": "Error while loading database for the first time"
+	},
+	"loadingStatementArchiveStatus": {
+		"message": "Chargement du relevé $current$ sur $total$...",
+		"description": "Progress status when loading the statement archives",
+		"placeholders": {
+			"current": {
+				"content": "$1",
+				"example": "Current element"
+			},
+			"total": {
+				"content": "$2",
+				"example": "Total number of elements"
+			}
+		}
+	},
+	"refreshingCurrencyRates": {
+		"message": "Mise à jour des taux de change...",
+		"description": "Message when loading the current currency rates"
+	},
+	"errorWhileLoadingType": {
+		"message": "Erreur lors du chargement de $type$",
+		"description": "Error displayed when loading a ressource of type $type$ failed",
+		"placeholders": {
+			"type": {
+				"content": "$1",
+				"example": "Type of element whose loading has failed"
+			}
+		}
+	},
+	"currencyConversion": {
+		"message": "Mise à jour des taux de change...",
+		"description": "Message displayed when applying the new currency rate to the database"
+	},
+	"loadingStatus": {
+		"message": "Chargement de $current$ sur $total$",
+		"description": "Progress status when loading multiple elements",
+		"placeholders": {
+			"current": {
+				"content": "$1",
+				"example": "Current element"
+			},
+			"total": {
+				"content": "$2",
+				"example": "Total number of elements"
+			}
+		}
+	},
+	"updatingDatabase": {
+		"message": "Mise à jour de la base...",
+		"description": "Message displayed when updating database"
+	},
+	"changeCurrency": {
+		"message": "Changer de devise",
+		"description": "Text of button to start setting another currency"
+	},
+	"instructionOERAccount": {
+		"message": "Pour utiliser la conversion vers une autre devise, veuillez créer un $linkStart$compte gratuit$linkEnd$ sur Open Exchange Rate et copier votre App ID ci-dessous :",
+		"description": "Instructions for creating and entering the OER App ID",
+		"placeholders": {
+			"linkStart": {
+				"content": "$1",
+				"example": "Opening tag of the wrapping anchor"
+			},
+			"linkEnd": {
+				"content": "$2",
+				"example": "Closing tag of the wrapping anchor"
+			}
+		}
+	},
+	"pleaseEnterOERAPIKey": {
+		"message": "Veuillez saisir votre clé API OpenExchangeRate",
+		"description": "Error message if the user submitted an empty value for the OER App ID"
+	},
+	"resetSettings": {
+		"message": "Réinitialiser la configuration",
+		"description": "Text of button to reset settings"
+	},
+	"rebuildDatabase": {
+		"message": "Reconstruire la base",
+		"description": "Text of button to rebuild database"
+	},
+	"settingsHaveBeenReset": {
+		"message": "La configuration a été réinitialisée",
+		"description": "Confirmation message when settings have been reset"
+	},
+	"refresh": {
+		"message": "Actualiser",
+		"description": "Text of button to refresh sales data"
+	},
+	"autoRefresh": {
+		"message": "Auto-refresh",
+		"description": "Label of checkbox to enable auto-refresh"
+	},
+	"disabled": {
+		"message": "Inactif",
+		"description": "Text of tooltip on auto-refresh when auto-refresh is disabled"
+	},
+	"30days": {
+		"message": "30 jours",
+		"description": "Text of button to use a 30 days time range for charts"
+	},
+	"6months": {
+		"message": "6 mois",
+		"description": "Text of button to use a 6 months time range for charts"
+	},
+	"allTime": {
+		"message": "Tout",
+		"description": "Text of button to use full time range for charts"
+	},
+	"numberSalesSingular": {
+		"message": "$number$ vente",
+		"description": "Display a number of sales when there is 0 or 1 sale",
+		"placeholders": {
+			"number": {
+				"content": "$1",
+				"example": "The number to display"
+			}
+		}
+	},
+	"numberSalesPlural": {
+		"message": "$number$ ventes",
+		"description": "Display a number of sales when there is more than one sale",
+		"placeholders": {
+			"number": {
+				"content": "$1",
+				"example": "The number to display"
+			}
+		}
+	},
+	"noActivity": {
+		"message": "(aucune activité)",
+		"description": "Message when no sales are found for a time point in a chart"
+	},
+	"salesDistributionByItem": {
+		"message": "Répartition des ventes et revenus par produit",
+		"description": "Legend of the chart showing sales and earnings distribution by item"
+	},
+	"otherItems": {
+		"message": "Autres produits",
+		"description": "Legend for the part of the chart showing sales and earnings distribution by item corresponding to all non listed items"
+	},
+	"salesDistributionByDayOfWeek": {
+		"message": "Répartition par jour de la semaine",
+		"description": "Legend of the chart showing sales distribution by day of week"
+	},
+	"salesDistributionByHourOfDay": {
+		"message": "Répartition des ventres par heure de la journée",
+		"description": "Legend for the chart showing sales distribution by hour of day"
+	},
+	"thisWeek": {
+		"message": "Cette semaine",
+		"description": "Title for widgets showing a stat for the current week"
+	},
+	"thisMonth": {
+		"message": "Ce mois",
+		"description": "Title for widgets showing a stat for the current month"
+	},
+	"totalSales": {
+		"message": "Total des ventes",
+		"description": "Title for widgets showing the total number of sales"
+	},
+	"estimationShort": {
+		"message": "Est.:",
+		"description": "Shortened version of Estimation, prefixed to the actual estimation in some widgets (must be short!)"
+	},
+	"totalAmountSold": {
+		"message": "Montant total vendu",
+		"description": "Title for widgets showing the total amount sold"
+	},
+	"totalEarnings": {
+		"message": "Total des revenus",
+		"description": "Title for widgets showing the total earnings"
+	},
+	"numberReferralCutsSingular": {
+		"message": "$number$ commission",
+		"description": "Display the number of referral cuts when there is 0 or 1",
+		"placeholders": {
+			"number": {
+				"content": "$1",
+				"example": "The number to display"
+			}
+		}
+	},
+	"numberReferralCutsPlural": {
+		"message": "$number$ commissions",
+		"description": "Display the number of referral cuts when there is more than one",
+		"placeholders": {
+			"number": {
+				"content": "$1",
+				"example": "The number to display"
+			}
+		}
+	},
+	"amountToNext": {
+		"message": "$amount$ pour le suivant",
+		"description": "Display an amount to the next level for paws/rates/elite levels",
+		"placeholders": {
+			"amount": {
+				"content": "$1",
+				"example": "The amount to display"
+			}
+		}
+	},
+	"maxReached": {
+		"message": "Maximum atteint",
+		"description": "Message displayed when the max paws/rates/elite level has been reached"
+	}
+}
