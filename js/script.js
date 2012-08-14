@@ -1086,6 +1086,7 @@
 	 * @param int month the month (1-12)
 	 * @param int year the year
 	 * @param function callback a function to call when complete
+	 * @return void
 	 */
 	function refreshMonthStatement( month, year, callback )
 	{
@@ -3603,9 +3604,9 @@
 
 										// Tooltips
 										tooltips.push( dateDisplay + '<br>' +
-														chrome.i18n.getMessage( ( row.sales > 1 ) ? 'numberSalesPlural' : 'numberSalesSingular', {
-															number: number_format( row.sales, 0 )
-														} ) + ', ' + displayCurrencyAmount( options.currency, amountValue ) );
+														chrome.i18n.getMessage( ( row.sales > 1 ) ? 'numberSalesPlural' : 'numberSalesSingular', [
+															number_format( row.sales, 0 )
+														] ) + ', ' + displayCurrencyAmount( options.currency, amountValue ) );
 									}
 									else
 									{
@@ -3707,9 +3708,9 @@
 									// Sales
 									sales.push( row.sales );
 									tooltipsSales.push( itemName + '<br>' +
-														chrome.i18n.getMessage( ( row.sales > 1 ) ? 'numberSalesPlural' : 'numberSalesSingular', {
-															number: number_format( row.sales, 0 )
-														} ) + ' - ' + number_format( row.sales / total.total * 100, 1 ) + '%' );
+														chrome.i18n.getMessage( ( row.sales > 1 ) ? 'numberSalesPlural' : 'numberSalesSingular', [
+															number_format( row.sales, 0 )
+														] ) + ' - ' + number_format( row.sales / total.total * 100, 1 ) + '%' );
 
 									// Earnings
 									value = useUSD ? row.totalAmount : row.totalAmountConverted;
