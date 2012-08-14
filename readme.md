@@ -4,7 +4,7 @@ Envastats is a Chrome extension built to provide meaningful reports about sales 
 
 Currently this extension is still in beta, so if you notice bug please report them using the bug tracking system.
 
-## Main features:
+## Main features
 
 - Display sales and earnings for the last 30 days, 6 months or for all time
 - Display sales and earnings distributions by items (12 most populars), days of week and hours of the day
@@ -19,7 +19,7 @@ Currently this extension is still in beta, so if you notice bug please report th
 - Uses a widgets structure, a customization tool is planned (see below)
 - l10n and i18n (english and french available, feel free to provide your own translation!)
 
-## Planned features:
+## Planned features
 
 - Add daily and hourly average sales rate
 - Add a desktop notification for each new sale and increment the counter in the main bar icon, with a button to reset counter
@@ -32,7 +32,7 @@ Currently this extension is still in beta, so if you notice bug please report th
 - Color themes
 - A full-screen mode to use this as a permanent dashboard
 
-## Credits:
+## Credits
 
 ### Inspirational plugins
 
@@ -44,7 +44,7 @@ Many ideas are taken from the following plugins, credits to their authors!
 - [Pixelentity Statement Booster](http://extras.envato.com/browser-plugins/envato-statement-booster/)
 - [Statementer for Envato's marketplaces](http://extras.envato.com/browser-plugins/statementer-for-envatos-marketplaces/)
 
-### External plugins:
+### External plugins
 
 - [jQuery](http://jquery.com/)
 - [Elycharts](http://elycharts.com)
