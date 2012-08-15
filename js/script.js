@@ -611,7 +611,7 @@
 	/**
 	 * Get l10n value
 	 * @param string name l10n value name
-	 * @return string the localized value
+	 * @return string|array the localized value
 	 */
 	function __l10n( name )
 	{
@@ -621,7 +621,7 @@
 	/**
 	 * Get i18n value
 	 * @param string name i18n value name
-	 * @return string the internationalized value
+	 * @return string|array the internationalized value
 	 */
 	function __i18n( name )
 	{
@@ -755,7 +755,7 @@
 					firstSale = new Date( parseInt( row.year, 10 ), parseInt( row.month, 10 ) - 1, parseInt( row.day, 10 ) );
 
 					// Log
-					console.log( 'First sale date: ' + displayDate( firstSale ) );
+					console.log( 'First sale date: ' + displayDate( firstSale, 'longDate' ) );
 				}
 				else
 				{
@@ -998,8 +998,8 @@
 		lastMonth = getStoredValue( 'last-month', false );
 		lastYear = getStoredValue( 'last-year', false );
 
-		// If never refresh (or reload is true), parse first available date
-		if ( !lastMonth || !lastYear )
+		// If never refresh (or reload is true), parse first available statement date
+		if ( lastMonth === false || !lastYear )
 		{
 			// Defaults
 			lastMonth = now.getMonth() + 1;
@@ -1018,7 +1018,7 @@
 		}
 
 		// Number or statements files to load, including current one (always refreshed)
-		nbStatements = Math.max( 1, ( lastYear != now.getFullYear() ) ? ( 12 - lastMonth ) + ( ( now.getFullYear() - lastYear - 1 ) * 12 ) + now.getMonth() + 1 : now.getMonth() + 1 - lastMonth );
+		nbStatements = Math.max( 1, ( lastYear != now.getFullYear() ) ? ( 13 - lastMonth ) + ( ( now.getFullYear() - lastYear - 1 ) * 12 ) + now.getMonth() + 1 : now.getMonth() + 2 - lastMonth );
 
 		// Function to parse months one after the other
 		nextMonth = function ()
@@ -1033,7 +1033,7 @@
 			++currentStatement;
 
 			// If all files have been loaded
-			if ( ( lastYear === now.getFullYear() && lastMonth > now.getMonth() ) || lastYear > now.getFullYear() )
+			if ( ( lastYear === now.getFullYear() && lastMonth > now.getMonth() + 1 ) || lastYear > now.getFullYear() )
 			{
 				// Cache
 				setStoredValue( 'last-month', now.getMonth() + 1 );
@@ -3829,7 +3829,7 @@
 								// Build chart
 								this.content.chart( {
 									template: 'envastats_salesWeek',
-									labels:   __i18n( 'daysLetter' ),
+									labels:   __i18n( 'daysShort' ),
 									tooltips: tooltips,
 									values: {
 										serie1: percentages

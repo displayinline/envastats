@@ -388,7 +388,7 @@
 		"description": "Message when no sales are found for a time point in a chart"
 	},
 	"salesDistributionByItem": {
-		"message": "Répartition des ventes et revenus par produit",
+		"message": "Répartition ventes/revenus par produit",
 		"description": "Legend of the chart showing sales and earnings distribution by item"
 	},
 	"otherItems": {
