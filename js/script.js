@@ -6,7 +6,7 @@
  * .||.....| .||. ||.    '|    '|..'|' |'..|'  '|.' '|..'|'  '|.' |'..|'
  *
  * Copyright (c) 2012 Display:inline
- * @url contact@display-inline.fr
+ * @mail contact@display-inline.fr
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -120,8 +120,8 @@
 				paws: [
 					{ start: 0,				name: 'Orange Paw'			},
 					{ start: 100,			name: 'Brown Paw'			},
-					{ start: 1000,			name: 'Black Paw'			},
-					{ start: 5000,			name: 'Red Paw'				},
+					{ start: 1000,			name: 'Red Paw'				},
+					{ start: 5000,			name: 'Black Paw'			},
 					{ start: 10000,			name: 'Silver Paw'			},
 					{ start: 50000,			name: 'Gold Paw'			},
 					{ start: 100000,		name: 'Blue Steel Paw'		},
@@ -943,7 +943,7 @@
 	}
 
 	/**
-	 * Update the screen height, if it is the current one
+	 * Update the main div height to fit the given screen, if it is the current one
 	 * @param jQuery screen the block whose height to use
 	 * @return void
 	 */
@@ -1006,7 +1006,7 @@
 			lastYear = now.getFullYear();
 
 			// Past statements links
-			$( '.sidebar-s .feature-list a[href^="/user/displayinline/statement?month="]' ).first().each( function ()
+			$( '.sidebar-s .feature-list a[href^="/user/' + username + '/statement?month="]' ).first().each( function ()
 			{
 				params = /month=([0-9]+)&year=([0-9]+)$/.exec( this.href );
 				if ( params )
@@ -2914,8 +2914,8 @@
 											// Menu
 											element.envastatsMenuTooltip(
 
-												'<button type="button" style="width: 125px" id="envastats-reset-settings">' + chrome.i18n.getMessage( 'resetSettings' ) + '</button><br>' +
-												'<button type="button" style="width: 125px" id="envastats-rebuild-database">' + chrome.i18n.getMessage( 'rebuildDatabase' ) + '</button>', {
+												'<button type="button" style="width: 160px" id="envastats-reset-settings">' + chrome.i18n.getMessage( 'resetSettings' ) + '</button><br>' +
+												'<button type="button" style="width: 160px" id="envastats-rebuild-database">' + chrome.i18n.getMessage( 'rebuildDatabase' ) + '</button>', {
 
 												classes: [ 'buttons-tooltip' ]
 

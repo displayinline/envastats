@@ -244,8 +244,8 @@
 		"description": "Text of cancel link/button"
 	},
 	"save": {
-		"message": "Choisir",
-		"description": "Text of save button when choosing a currency"
+		"message": "Valider",
+		"description": "Text of save button when setting the Open Exchange Rate App ID"
 	},
 	"loadingDatabase": {
 		"message": "Chargement de la base de données...",
@@ -328,7 +328,7 @@
 		"description": "Error message if the user submitted an empty value for the OER App ID"
 	},
 	"resetSettings": {
-		"message": "Réinitialiser la configuration",
+		"message": "Réinitialiser la config.",
 		"description": "Text of button to reset settings"
 	},
 	"rebuildDatabase": {

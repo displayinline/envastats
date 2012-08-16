@@ -269,7 +269,7 @@
 	},
 	"save": {
 		"message": "Save",
-		"description": "Text of save button when choosing a currency"
+		"description": "Text of save button when setting the Open Exchange Rate App ID"
 	},
 	"loadingDatabase": {
 		"message": "Loading database...",
