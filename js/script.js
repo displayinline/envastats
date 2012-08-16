@@ -1228,7 +1228,7 @@
 			else
 			{
 				// Whole database refresh
-				setNewAltCurrency( currency, callback );
+				setNewAltCurrency( currencyAlt, callback );
 			}
 		}
 		else
