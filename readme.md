@@ -2,7 +2,7 @@
 
 Envastats is a Chrome extension built to provide meaningful reports about sales on Envato's marketplaces. At first I wanted to display a simple chart of sales, but after way more time than planned, I ended up with a multiple features widgetized dashboard - I just don't know how to keep things simple...
 
-Currently this extension is still in beta, so if you notice bug please report them using the bug tracking system.
+The extension is available on the Chrome Web Store : https://chrome.google.com/webstore/detail/bkaipliggfhnndndlohjnfcblckmabmk
 
 ## Main features
 

@@ -1372,38 +1372,40 @@
 					break;
 
 				// Day
-				case 'd':	output += padDateValue( dayofmonth );							break;			// Day of the month, 2 digits with leading zeros
-				case 'D':	output += __i18n( 'daysShort' )[ day ];							break;			// A textual representation of a day, three letters
-				case 'j':	output += dayofmonth;											break;			// Day of the month without leading zeros
-				case 'l':	output += __i18n( 'days' )[ day ];								break;			// A full textual representation of the day of the week
-				case 'N':	output += day || 7;												break;			// ISO-8601 numeric representation of the day of the week (added in PHP 5.1.0)
-				case 'w':	output += day;													break;			// Numeric representation of the day of the week
-				case 'z':	output += getDayOfYear( date );									break;			// The day of the year (starting from 0)
+				case 'd':	output += padDateValue( dayofmonth );							break;		// Day of the month, 2 digits with leading zeros
+				case 'D':	output += __i18n( 'daysShort' )[ day ];							break;		// A textual representation of a day, three letters
+				case 'j':	output += dayofmonth;											break;		// Day of the month without leading zeros
+				case 'l':	output += __i18n( 'days' )[ day ];								break;		// A full textual representation of the day of the week
+				case 'N':	output += day || 7;												break;		// ISO-8601 numeric representation of the day of the week (added in PHP 5.1.0)
+				case 'w':	output += day;													break;		// Numeric representation of the day of the week
+				case 'z':	output += getDayOfYear( date );									break;		// The day of the year (starting from 0)
 
 				// Week
-				case 'W':	output += getWeekNumber( date );								break;			// ISO-8601 week number of year, weeks starting on Monday (added in PHP 4.1.0)
+				case 'W':	output += getWeekNumber( date );								break;		// ISO-8601 week number of year, weeks starting on Monday (added in PHP 4.1.0)
 
 				// Month
-				case 'F':	output += __i18n( 'months' )[ month ];							break;			// A full textual representation of a month, such as January or March
-				case 'm':	output += padDateValue( month + 1 );							break;			// Numeric representation of a month, with leading zeros
-				case 'M':	output += __i18n( 'monthsShort' )[ month ];						break;			// A short textual representation of a month, three letters
-				case 'n':	output += ( month + 1 );										break;			// Numeric representation of a month, without leading zeros
+				case 'F':	output += __i18n( 'months' )[ month ];							break;		// A full textual representation of a month, such as January or March
+				case 'm':	output += padDateValue( month + 1 );							break;		// Numeric representation of a month, with leading zeros
+				case 'M':	output += __i18n( 'monthsShort' )[ month ];						break;		// A short textual representation of a month, three letters
+				case 'n':	output += ( month + 1 );										break;		// Numeric representation of a month, without leading zeros
 
 				// Year
-				case 'Y':	output += date.getFullYear();									break;			// A full numeric representation of a year, 4 digits
-				case 'y':	output += date.getFullYear().substr( 2, 2 );					break;			// A two digit representation of a year
+				case 'Y':	output += date.getFullYear();									break;		// A full numeric representation of a year, 4 digits
+				case 'y':	output += date.getFullYear().substr( 2, 2 );					break;		// A two digit representation of a year
 
 				// Time
-				case 'a':	output += ( hours < 12 ) ? 'am' : 'pm';							break;			// Lowercase Ante meridiem and Post meridiem
-				case 'A':	output += ( hours < 12 ) ? 'AM' : 'PM';							break;			// Uppercase Ante meridiem and Post meridiem
-				case 'g':	output += ( hours < 12 ) ? hours : hours - 12;					break;			// 12-hour format of an hour without leading zeros
-				case 'G':	output += hours;												break;			// 24-hour format of an hour without leading zeros
-				case 'h':	output += padDateValue( ( hours < 12 ) ? hours : hours - 12 );	break;			// 12-hour format of an hour with leading zeros
-				case 'H':	output += padDateValue( hours );								break;			// 24-hour format of an hour with leading zeros
-				case 'i':	output += padDateValue( date.getMinutes() );					break;			// Minutes with leading zeros
-				case 's':	output += padDateValue( date.getSeconds() );					break;			// Seconds, with leading zeros
+				case 'a':	output += ( hours < 12 ) ? 'am' : 'pm';							break;		// Lowercase Ante meridiem and Post meridiem
+				case 'A':	output += ( hours < 12 ) ? 'AM' : 'PM';							break;		// Uppercase Ante meridiem and Post meridiem
+				case 'g':	output += ( hours < 12 ) ? hours : hours - 12;					break;		// 12-hour format of an hour without leading zeros
+				case 'G':	output += hours;												break;		// 24-hour format of an hour without leading zeros
+				case 'h':	output += padDateValue( ( hours < 12 ) ? hours : hours - 12 );	break;		// 12-hour format of an hour with leading zeros
+				case 'H':	output += padDateValue( hours );								break;		// 24-hour format of an hour with leading zeros
+				case 'i':	output += padDateValue( date.getMinutes() );					break;		// Minutes with leading zeros
+				case 's':	output += padDateValue( date.getSeconds() );					break;		// Seconds, with leading zeros
 
-				default:	output += chr;			break;
+				default:
+					output += chr;
+					break;
 			}
 		}
 

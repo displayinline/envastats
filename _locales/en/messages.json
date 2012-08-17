@@ -424,7 +424,7 @@
 		"description": "Legend of the chart showing sales distribution by day of week"
 	},
 	"salesDistributionByHourOfDay": {
-		"message": "Sales distribution by hour of day",
+		"message": "Sales distribution by hour of day (local timezone)",
 		"description": "Legend for the chart showing sales distribution by hour of day"
 	},
 	"thisWeek": {
