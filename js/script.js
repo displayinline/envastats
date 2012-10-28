@@ -435,7 +435,6 @@
 				NZD: '$',
 				NIO: 'C$',
 				NGN: '₦',
-				KPW: '₩',
 				NOK: 'kr',
 				OMR: '﷼',
 				PKR: '₨',
@@ -454,7 +453,6 @@
 				SBD: '$',
 				SOS: 'S',
 				ZAR: 'R',
-				KRW: '₩',
 				LKR: '₨',
 				SEK: 'kr',
 				SRD: '$',
@@ -524,58 +522,58 @@
 				isoTime:        chrome.i18n.getMessage( 'dateFormat_isoTime' ),
 				sqlDatetime:	chrome.i18n.getMessage( 'dateFormat_sqlDatetime' ),
 				week:			chrome.i18n.getMessage( 'dateFormat_week' ),
-				month:			chrome.i18n.getMessage( 'dateFormat_month' ),
+				month:			chrome.i18n.getMessage( 'dateFormat_month' )
 			}
 		},
 
 		i18n = {
 
 			// Months/days names
-			months:			[ chrome.i18n.getMessage( 'months_January' ),
-							  chrome.i18n.getMessage( 'months_February' ),
-							  chrome.i18n.getMessage( 'months_March' ),
-							  chrome.i18n.getMessage( 'months_April' ),
-							  chrome.i18n.getMessage( 'months_May' ),
-							  chrome.i18n.getMessage( 'months_June' ),
-							  chrome.i18n.getMessage( 'months_July' ),
-							  chrome.i18n.getMessage( 'months_August' ),
-							  chrome.i18n.getMessage( 'months_September' ),
-							  chrome.i18n.getMessage( 'months_October' ),
-							  chrome.i18n.getMessage( 'months_November' ),
-							  chrome.i18n.getMessage( 'months_December' ) ],
-			monthsShort:	[ chrome.i18n.getMessage( 'monthsShort_January' ),
-							  chrome.i18n.getMessage( 'monthsShort_February' ),
-							  chrome.i18n.getMessage( 'monthsShort_March' ),
-							  chrome.i18n.getMessage( 'monthsShort_April' ),
-							  chrome.i18n.getMessage( 'monthsShort_May' ),
-							  chrome.i18n.getMessage( 'monthsShort_June' ),
-							  chrome.i18n.getMessage( 'monthsShort_July' ),
-							  chrome.i18n.getMessage( 'monthsShort_August' ),
-							  chrome.i18n.getMessage( 'monthsShort_September' ),
-							  chrome.i18n.getMessage( 'monthsShort_October' ),
-							  chrome.i18n.getMessage( 'monthsShort_November' ),
-							  chrome.i18n.getMessage( 'monthsShort_December' ) ],
-			days:			[ chrome.i18n.getMessage( 'days_Sunday' ),
-							  chrome.i18n.getMessage( 'days_Monday' ),
-							  chrome.i18n.getMessage( 'days_Tuesday' ),
-							  chrome.i18n.getMessage( 'days_Wednesday' ),
-							  chrome.i18n.getMessage( 'days_Thursday' ),
-							  chrome.i18n.getMessage( 'days_Friday' ),
-							  chrome.i18n.getMessage( 'days_Saturday' ) ],
-			daysShort:		[ chrome.i18n.getMessage( 'daysShort_Sunday' ),
-							  chrome.i18n.getMessage( 'daysShort_Monday' ),
-							  chrome.i18n.getMessage( 'daysShort_Tuesday' ),
-							  chrome.i18n.getMessage( 'daysShort_Wednesday' ),
-							  chrome.i18n.getMessage( 'daysShort_Thursday' ),
-							  chrome.i18n.getMessage( 'daysShort_Friday' ),
-							  chrome.i18n.getMessage( 'daysShort_Saturday' ) ],
-			daysLetter:		[ chrome.i18n.getMessage( 'daysLetter_Sunday' ),
-							  chrome.i18n.getMessage( 'daysLetter_Monday' ),
-							  chrome.i18n.getMessage( 'daysLetter_Tuesday' ),
-							  chrome.i18n.getMessage( 'daysLetter_Wednesday' ),
-							  chrome.i18n.getMessage( 'daysLetter_Thursday' ),
-							  chrome.i18n.getMessage( 'daysLetter_Friday' ),
-							  chrome.i18n.getMessage( 'daysLetter_Saturday' ) ]
+			months:			[	chrome.i18n.getMessage( 'months_January' ),
+								chrome.i18n.getMessage( 'months_February' ),
+								chrome.i18n.getMessage( 'months_March' ),
+								chrome.i18n.getMessage( 'months_April' ),
+								chrome.i18n.getMessage( 'months_May' ),
+								chrome.i18n.getMessage( 'months_June' ),
+								chrome.i18n.getMessage( 'months_July' ),
+								chrome.i18n.getMessage( 'months_August' ),
+								chrome.i18n.getMessage( 'months_September' ),
+								chrome.i18n.getMessage( 'months_October' ),
+								chrome.i18n.getMessage( 'months_November' ),
+								chrome.i18n.getMessage( 'months_December' ) ],
+			monthsShort:	[	chrome.i18n.getMessage( 'monthsShort_January' ),
+								chrome.i18n.getMessage( 'monthsShort_February' ),
+								chrome.i18n.getMessage( 'monthsShort_March' ),
+								chrome.i18n.getMessage( 'monthsShort_April' ),
+								chrome.i18n.getMessage( 'monthsShort_May' ),
+								chrome.i18n.getMessage( 'monthsShort_June' ),
+								chrome.i18n.getMessage( 'monthsShort_July' ),
+								chrome.i18n.getMessage( 'monthsShort_August' ),
+								chrome.i18n.getMessage( 'monthsShort_September' ),
+								chrome.i18n.getMessage( 'monthsShort_October' ),
+								chrome.i18n.getMessage( 'monthsShort_November' ),
+								chrome.i18n.getMessage( 'monthsShort_December' ) ],
+			days:			[	chrome.i18n.getMessage( 'days_Sunday' ),
+								chrome.i18n.getMessage( 'days_Monday' ),
+								chrome.i18n.getMessage( 'days_Tuesday' ),
+								chrome.i18n.getMessage( 'days_Wednesday' ),
+								chrome.i18n.getMessage( 'days_Thursday' ),
+								chrome.i18n.getMessage( 'days_Friday' ),
+								chrome.i18n.getMessage( 'days_Saturday' ) ],
+			daysShort:		[	chrome.i18n.getMessage( 'daysShort_Sunday' ),
+								chrome.i18n.getMessage( 'daysShort_Monday' ),
+								chrome.i18n.getMessage( 'daysShort_Tuesday' ),
+								chrome.i18n.getMessage( 'daysShort_Wednesday' ),
+								chrome.i18n.getMessage( 'daysShort_Thursday' ),
+								chrome.i18n.getMessage( 'daysShort_Friday' ),
+								chrome.i18n.getMessage( 'daysShort_Saturday' ) ],
+			daysLetter:		[	chrome.i18n.getMessage( 'daysLetter_Sunday' ),
+								chrome.i18n.getMessage( 'daysLetter_Monday' ),
+								chrome.i18n.getMessage( 'daysLetter_Tuesday' ),
+								chrome.i18n.getMessage( 'daysLetter_Wednesday' ),
+								chrome.i18n.getMessage( 'daysLetter_Thursday' ),
+								chrome.i18n.getMessage( 'daysLetter_Friday' ),
+								chrome.i18n.getMessage( 'daysLetter_Saturday' ) ]
 
 		},
 
@@ -834,7 +832,7 @@
 		var userWidgets = library.options.widgets.get();
 
 		// Main widget screen
-		widgets.main = new WidgetsScreen( screenDiv, onResize )
+		widgets.main = new WidgetsScreen( screenDiv, onResize );
 
 		// Create rows
 		$.each( userWidgets, function ( rowName, rowConfig )
@@ -858,29 +856,27 @@
 				}
 
 				// Type
-				switch ( widgetConfig.type )
+				if ( widgetConfig.type === 'column' )
 				{
-					case 'column':
-						// Object
-						column = new WidgetColumn( div );
+					// Object
+					column = new WidgetColumn( div );
 
-						// Register
-						row.addWidget( widgetName, column );
+					// Register
+					row.addWidget( widgetName, column );
 
-						// Inner widgets
-						$.each( widgetConfig.widgets, function ( subWidgetName, subWidgetConfig )
-						{
-							column.addWidget( subWidgetName, new Widget( column.newChildDiv(), library.widgets[ subWidgetConfig.controller ], subWidgetConfig.options ) );
-						} );
-						break;
+					// Inner widgets
+					$.each( widgetConfig.widgets, function ( subWidgetName, subWidgetConfig )
+					{
+						column.addWidget( subWidgetName, new Widget( column.newChildDiv(), library.widgets[ subWidgetConfig.controller ], subWidgetConfig.options ) );
+					} );
+				}
+				else
+				{
+					// Object
+					widget = new Widget( div, library.widgets[ widgetConfig.controller ], widgetConfig.options );
 
-					default:
-						// Object
-						widget = new Widget( div, library.widgets[ widgetConfig.controller ], widgetConfig.options );
-
-						// Register
-						row.addWidget( widgetName, widget );
-						break;
+					// Register
+					row.addWidget( widgetName, widget );
 				}
 			} );
 		} );
@@ -1327,12 +1323,12 @@
 	 */
 	function displayCurrencyAmount( currency, amount, decimals )
 	{
-		var symbol = rates.symbols[ currency ] || currency,
-			amount = number_format( amount, decimals || 0 );
+		var symbol = rates.symbols[ currency ] || currency;
+		amount = number_format( amount, decimals || 0 );
 
 		return __l10n( 'currency_display' ).replace( '{currency}', currency )
-										  .replace( '{symbol}', symbol )
-										  .replace( '{amount}', amount );
+											.replace( '{symbol}', symbol )
+											.replace( '{amount}', amount );
 	}
 
 	/**
@@ -2702,7 +2698,7 @@
 	 */
 	var CallbackList = function()
 	{
-		this.list = new Array();
+		this.list = [];
 	};
 
 	/**
@@ -2950,7 +2946,7 @@
 													showScreen( screens.widgets );
 
 												}, true );
-											} )
+											} );
 										} ),
 
 				refresh:				new Control( '<button type="button">' + chrome.i18n.getMessage( 'refresh' ) + '</button>',
@@ -3252,7 +3248,7 @@
 											hours:	{ controller: 'chartHourSales',	position: { left: '280px', right: 0 } }
 										}
 
-									},
+									}
 
 								} )
 
@@ -3346,7 +3342,7 @@
 															return 'SELECT strftime(\'' + format + '\', `date`) AS `date`, COUNT(*) AS `sales`, ' +
 																	'SUM(`amount`) AS `totalAmount`, SUM(`amount_converted`) AS `totalAmountConverted` FROM `statements` ' +
 																	'WHERE `type`=?' + parts.where +
-																	'GROUP BY strftime(\'' + format + '\', `date`)'
+																	'GROUP BY strftime(\'' + format + '\', `date`)';
 														},
 														getChartRangeRequestParams,
 														[ library.options.today, library.options.chartRange, library.options.useChartRange, library.options.currency ] ),
@@ -3480,11 +3476,11 @@
 									dateIndex, dateDisplay, row, amountValue;
 
 								// Current range status
-								if ( this.vars.chartRange == undefined )
+								if ( this.vars.chartRange === undefined )
 								{
 									this.vars.chartRange = options.chartRange;
 								}
-								if ( this.vars.useChartRange == undefined )
+								if ( this.vars.useChartRange === undefined )
 								{
 									this.vars.useChartRange = options.useChartRange;
 								}
@@ -3514,31 +3510,32 @@
 										}
 
 										return 'date' + currentDate.getFullYear() + '-' + padDateValue( currentDate.getMonth() + 1 ) + '-' + padDateValue( currentDate.getDate() );
-									}
+									};
 									nextDate = function()
 									{
 										currentDate = offsetDate( currentDate, 1 );
-									}
+									};
 								}
 								else if ( days < 250 )
 								{
 									nextIndex = function()
 									{
 										var index,
-											week = getWeekNumber( currentDate );
+											week = getWeekNumber( currentDate ),
+											year = currentDate.getFullYear();
 
 										// If done
-										if ( week > getWeekNumber( now ) )
+										if ( now.getFullYear() === year && week > getWeekNumber( now ) )
 										{
 											return false;
 										}
 
-										return 'date' + currentDate.getFullYear() + '-' + week;
-									}
+										return 'date' + year + '-' + week;
+									};
 									nextDate = function()
 									{
 										currentDate = offsetDate( currentDate, 7 );
-									}
+									};
 								}
 								else
 								{
@@ -3555,7 +3552,7 @@
 										}
 
 										return 'date' + year + '-' + padDateValue( month + 1 );
-									}
+									};
 									nextDate = function()
 									{
 										var month = currentDate.getMonth(),
@@ -3568,7 +3565,7 @@
 											++year;
 										}
 										currentDate = new Date( year, month, 1, 0, 0, 0 );
-									}
+									};
 								}
 
 								// Process
@@ -3872,7 +3869,7 @@
 									i, localHour, row, value;
 
 								// Compute total
-								for (var i = 0; i < 24; ++i )
+								for ( i = 0; i < 24; ++i )
 								{
 									localHour = ( i - hoursOffset ) % 24;
 									if ( localHour < 0 )
@@ -3887,7 +3884,7 @@
 								}
 
 								// Process
-								for (var i = 0; i < 24; ++i )
+								for ( i = 0; i < 24; ++i )
 								{
 									localHour = ( i - hoursOffset ) % 24;
 									if ( localHour < 0 )
@@ -4251,7 +4248,7 @@
 
 								// Create
 								this.content.append( '<h5>' + chrome.i18n.getMessage( ( row.total > 1 ) ? 'numberReferralCutsPlural' : 'numberReferralCutsSingular', [ row.total ] ) + '</h5>' +
-													 '<p><strong>' + displayCurrencyAmount( options.currency, amount, 2 ) + '</strong>' + estimation + '</p>' );
+													'<p><strong>' + displayCurrencyAmount( options.currency, amount, 2 ) + '</strong>' + estimation + '</p>' );
 							}
 		} ),
 
@@ -4636,7 +4633,7 @@
 		}
 		// Previous month if day < convertDay
 		else if ( now.getDate() < convertDay &&
-			 ( ( month < 12 && month === currentMonth - 1 && currentYear === year ) || ( month === 12 && currentMonth === 1 && currentYear === year + 1 ) ) )
+					( ( month < 12 && month === currentMonth - 1 && currentYear === year ) || ( month === 12 && currentMonth === 1 && currentYear === year + 1 ) ) )
 		{
 			useCurrent = true;
 		}
@@ -4884,17 +4881,13 @@
 	 */
 	function offsetDate( date, offset, preserveTime )
 	{
-			// Same date, at midnight
-		var dateMidnight = new Date( date.getFullYear(),
-									 date.getMonth(),
-									 date.getDate(),
-									 preserveTime ? date.getHours() : 0,
-									 preserveTime ? date.getMinutes() : 0,
-									 preserveTime ? date.getSeconds() : 0,
-									 preserveTime ? date.getMilliseconds() : 0 );
-
-		// New date
-		return new Date( dateMidnight.getTime() + ( offset * 86400000 ) );
+		return new Date( date.getFullYear(),
+									date.getMonth(),
+									date.getDate() + offset,
+									preserveTime ? date.getHours() : 0,
+									preserveTime ? date.getMinutes() : 0,
+									preserveTime ? date.getSeconds() : 0,
+									preserveTime ? date.getMilliseconds() : 0 );
 	}
 
 	/**
@@ -5240,7 +5233,7 @@
 					// Draw rectangular zones
 					oddHProps: {
 						fill: '#CCC',
-						opacity: .1,
+						opacity: 0.1,
 						'stroke-width': 0
 					},
 
@@ -5334,7 +5327,7 @@
 					// Draw rectangular zones
 					oddHProps: {
 						fill: '#CCC',
-						opacity: .1,
+						opacity: 0.1,
 						'stroke-width': 0
 					},
 
@@ -5429,7 +5422,7 @@
 					// Draw rectangular zones
 					oddHProps: {
 						fill: '#CCC',
-						opacity: .1,
+						opacity: 0.1,
 						'stroke-width': 0
 					},
 
