@@ -802,10 +802,9 @@
 
 		// Add widgets block
 		screens.widgets = addScreen( 'widgets' );
-		showScreen( screens.widgets );
 
 		// Build widgets
-		buildWidgets( $( '<div></div>').appendTo( screens.widgets ), refreshScreen );
+		buildWidgets( $( '<div></div>' ).appendTo( screens.widgets ), refreshScreen );
 
 		// Controls block
 		screens.widgetsControls = $( '<div class="envastats-options"></div>' ).appendTo( screens.widgets );
@@ -815,6 +814,7 @@
 
 		// Set as ready
 		ready = true;
+		showScreen( screens.widgets );
 
 		// First refresh
 		refreshScreen();
@@ -3466,14 +3466,13 @@
 									days = ( options.useChartRange || !firstSale ) ? options.chartRange : Math.ceil( ( now.getTime() - firstSale.getTime() ) / 86400000 ),
 
 									// Start date
-									startDate = offsetDate( options.today, 1 - days ),
-									currentDate = startDate,
+									currentDate = getFirstDayOfWeek( offsetDate( options.today, 1 - days ) ),
 
 									// Functions to retrieve next date index and next date
-									nextIndex, nextDate,
+									nextIndexes, nextDate,
 
 									// Work vars
-									dateIndex, dateDisplay, row, amountValue;
+									dateIndexes, dateDisplay, row, saleValue, amountValue, i;
 
 								// Current range status
 								if ( this.vars.chartRange === undefined )
@@ -3499,7 +3498,7 @@
 								// Mode
 								if ( days < 50 )
 								{
-									nextIndex = function()
+									nextIndexes = function()
 									{
 										var index;
 
@@ -3509,7 +3508,7 @@
 											return false;
 										}
 
-										return 'date' + currentDate.getFullYear() + '-' + padDateValue( currentDate.getMonth() + 1 ) + '-' + padDateValue( currentDate.getDate() );
+										return [ 'date' + currentDate.getFullYear() + '-' + padDateValue( currentDate.getMonth() + 1 ) + '-' + padDateValue( currentDate.getDate() ) ];
 									};
 									nextDate = function()
 									{
@@ -3518,19 +3517,30 @@
 								}
 								else if ( days < 250 )
 								{
-									nextIndex = function()
+									nextIndexes = function()
 									{
 										var index,
-											week = getWeekNumber( currentDate ),
-											year = currentDate.getFullYear();
+											week = getWeekNumber( currentDate, false ), // Use false to get week 53 instead of 1st of next year, because that's how SQLite works
+											year = currentDate.getFullYear(),
+											nowYear = now.getFullYear(),
+											weekOffset;
 
 										// If done
-										if ( now.getFullYear() === year && week > getWeekNumber( now ) )
+										if ( ( year === nowYear && week > getWeekNumber( now, false ) ) || year > nowYear )
 										{
 											return false;
 										}
 
-										return 'date' + year + '-' + week;
+										// SQLite use UNIX week number, which starts at 0
+										weekOffset = yearStartsWithWeekOne( year ) ? 1 : 0;
+
+										// Particular case of last week of year spanning across 2 years : the database retrieves 2 week numbers, 53 and 0
+										if ( isLastWeekOfYear( currentDate ) && currentDate.getDate() > 25 )
+										{
+											return [ 'date' + year + '-' + padDateValue( week - weekOffset ), 'date' + ( year + 1 ) + '-00' ];
+										}
+
+										return [ 'date' + year + '-' + padDateValue( week - weekOffset ) ];
 									};
 									nextDate = function()
 									{
@@ -3539,19 +3549,20 @@
 								}
 								else
 								{
-									nextIndex = function()
+									nextIndexes = function()
 									{
 										var index,
 											month = currentDate.getMonth(),
-											year = currentDate.getFullYear();
+											year = currentDate.getFullYear(),
+											nowYear = now.getFullYear();
 
 										// If done
-										if ( ( year === now.getFullYear() && month > now.getMonth() ) || year > now.getFullYear() )
+										if ( ( year === nowYear && month > now.getMonth() ) || year > nowYear )
 										{
 											return false;
 										}
 
-										return 'date' + year + '-' + padDateValue( month + 1 );
+										return [ 'date' + year + '-' + padDateValue( month + 1 ) ];
 									};
 									nextDate = function()
 									{
@@ -3569,7 +3580,7 @@
 								}
 
 								// Process
-								while ( dateIndex = nextIndex() )
+								while ( dateIndexes = nextIndexes() )
 								{
 									// X labels
 									if ( days < 50 )
@@ -3594,26 +3605,32 @@
 									}
 
 									// Data
-									row = data[ dateIndex ];
-									if ( row )
+									saleValue = 0;
+									amountValue = 0;
+									for ( i = 0; i < dateIndexes.length; ++i )
 									{
-										sales.push( row.sales );
-										amountValue = useUSD ? row.totalAmount : row.totalAmountConverted;
-										amount.push( amountValue );
+										row = data[ dateIndexes[ i ] ];
+										if ( row )
+										{
+											saleValue += row.sales;
+											amountValue += useUSD ? row.totalAmount : row.totalAmountConverted;
+										}
+									}
 
-										// Tooltips
+									// Final values
+									sales.push( saleValue );
+									amount.push( amountValue );
+
+									// Tooltips
+									if ( saleValue || amountValue )
+									{
 										tooltips.push( dateDisplay + '<br>' +
-														chrome.i18n.getMessage( ( row.sales > 1 ) ? 'numberSalesPlural' : 'numberSalesSingular', [
-															number_format( row.sales, 0 )
+														chrome.i18n.getMessage( ( saleValue > 1 ) ? 'numberSalesPlural' : 'numberSalesSingular', [
+															number_format( saleValue, 0 )
 														] ) + ', ' + displayCurrencyAmount( options.currency, amountValue ) );
 									}
 									else
 									{
-										// Empty
-										sales.push( 0 );
-										amount.push( 0 );
-
-										// Tooltips
 										tooltips.push( dateDisplay + '<br>' +
 														chrome.i18n.getMessage( 'noActivity' ) );
 									}
@@ -4925,20 +4942,45 @@
 	}
 
 	/**
-	 * Get the week of year from a date
+	 * Check if the date is in the last week of the year
 	 * @param Date date the date object
+	 * @return boolean true if in the last week, else false
+	 */
+	function isLastWeekOfYear( date )
+	{
+		var lastDay;
+
+		// Simple checks
+		if ( date.getMonth() < 11 )
+		{
+			return false;
+		}
+
+		// Last day
+		lastDay = new Date( date.getFullYear(), 11, 31 );
+
+		// Check if after last monday
+		return ( date.getDate() > lastDay.getDate() - ( lastDay.getDay() || 7 ) );
+	}
+
+	/**
+	 * Get the week of year from a date (european mode : first week of the year is the first one with at least four days)
+	 * @param Date date the date object
+	 * @param boolean fixLastWeek return 1 for the first week of next year
 	 * @return int the number of the week
 	 * @url http://stackoverflow.com/questions/6117814/get-week-of-year-in-javascript-like-in-php
 	 */
-	function getWeekNumber( date )
+	function getWeekNumber( date, fixLastWeek )
 	{
+			// Year
+		var year = date.getFullYear(),
 			// First day of year
-		var yearStart = new Date( date.getFullYear(), 0, 1 ),
+			yearStart = new Date( year, 0, 1 ),
 
 			// Copy date so we don't modify original
-			weekStart = new Date( date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0 ),
+			weekStart = new Date( year, date.getMonth(), date.getDate(), 0, 0, 0 ),
 
-			// Week number
+			// Final number
 			weekNo;
 
 		// Set to nearest Thursday: current date + 4 - current day number
@@ -4948,7 +4990,40 @@
 		// Calculate full weeks to nearest Thursday
 		weekNo = Math.ceil( ( ( ( weekStart.getTime() - yearStart.getTime() ) / 86400000) + 1 ) / 7 );
 
+		// Fix for last week
+		if ( fixLastWeek !== false && ( weekNo > 51 ) && isLastWeekOfYear( date ) && yearStartsWithWeekOne( year + 1 ) )
+		{
+			weekNo = 1;
+		}
+
 		return weekNo;
+	}
+
+	/**
+	 * Check if a year starts by week 1 or 52/53
+	 * @param int year the year to check
+	 * @return boolean true if the year starts by week 1, else false
+	 */
+	var yearsStartWeek = {};
+	function yearStartsWithWeekOne( year )
+	{
+		var key = 'year' + year,
+			yearStart, startDay;
+
+		// If not already detected
+		if ( yearsStartWeek[ key ] === undefined )
+		{
+			// First day of year
+			yearStart = new Date( year, 0, 1 );
+
+			// Day of week (make Sunday's day number 7)
+			startDay = yearStart.getDay() || 7;
+
+			// If Thursday or earlier : has week one
+			yearsStartWeek[ key ] = ( startDay < 5 );
+		}
+
+		return yearsStartWeek[ key ];
 	}
 
 	/**
