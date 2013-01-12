@@ -3424,6 +3424,18 @@
 			// Relative dates
 			startDate = offsetDate( options.today, -( options.chartRange - 1 ) );
 
+			// Extend range to match display granularity
+			if ( options.chartRange >= 50 )
+			{
+				// Make sure we start at the beginning of the week
+				startDate = getFirstDayOfWeek( startDate );
+			}
+			else if ( options.chartRange >= 250 )
+			{
+				// Make sure we start at the beginning of the month
+				startDate = getFirstDayOfMonth( startDate );
+			}
+
 			return [ getStatementTypeCode( 'sale' ), displayDate( startDate, 'sqlDatetime' ) ];
 		}
 		else
@@ -3466,7 +3478,7 @@
 									days = ( options.useChartRange || !firstSale ) ? options.chartRange : Math.ceil( ( now.getTime() - firstSale.getTime() ) / 86400000 ),
 
 									// Start date
-									currentDate = getFirstDayOfWeek( offsetDate( options.today, 1 - days ) ),
+									currentDate = offsetDate( options.today, 1 - days ),
 
 									// Functions to retrieve next date index and next date
 									nextIndexes, nextDate,
@@ -3498,6 +3510,7 @@
 								// Mode
 								if ( days < 50 )
 								{
+									// One day per bar
 									nextIndexes = function()
 									{
 										var index;
@@ -3517,6 +3530,7 @@
 								}
 								else if ( days < 250 )
 								{
+									// One week per bar
 									nextIndexes = function()
 									{
 										var index,
@@ -3546,9 +3560,13 @@
 									{
 										currentDate = offsetDate( currentDate, 7 );
 									};
+
+									// Make sure we start on a monday
+									currentDate = getFirstDayOfWeek( currentDate );
 								}
 								else
 								{
+									// One month per bar
 									nextIndexes = function()
 									{
 										var index,
@@ -3577,6 +3595,9 @@
 										}
 										currentDate = new Date( year, month, 1, 0, 0, 0 );
 									};
+
+									// Make sure we start at the beginning of the month
+									currentDate = getFirstDayOfMonth( currentDate );
 								}
 
 								// Process
