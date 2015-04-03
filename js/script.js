@@ -66,6 +66,13 @@
  * - currency functions
  * - utility functions
  * - Elychart templates
+ *
+ * Known issues:
+ * - currencies that convert to high numbers spread out of their columns
+ *
+ * Suggested features:
+ * - Time range selector, instead of buttons
+ * - Full-screen mode
  */
 
 ;(function ($, window, document, undefined)
@@ -85,6 +92,9 @@
 		storageName = 'envastats-' + username + '-',
 		dbName      = 'envastats_' + username.replace( /[^a-zA-Z0-9]+/, '' ),
 
+		// Database migrator
+		M, updateOnMigrate = false,
+
 		/*
 		 * Envato vars
 		 */
@@ -101,14 +111,31 @@
 
 				// Type codes, used to save storing space in DB
 				types: {
-					'sale':			1,
-					'withdrawal':	2,
-					'referral_cut':	3,
-					'deposit':		4,
-					'purchase':		5,
-					'refund':		6,		// Not sure of this one
+					'Sale':						1,
+					'Withdrawal Request':		2,
+					'Referral Cut':				3,
+					'Deposit':					4,
+					'Purchase':					5,
+					'Withdrawal Cancellation':	6,
+					'Sale Reversal':			7,
+					'Marketing':				8,
+					'Manual Adjustment':		9,
 
-					'other':		0		// For unknown types
+					'Other':					0		// For unknown types
+				},
+
+				// Envato marketplaces
+				marketplaces: {
+					'ThemeForest':				1,
+					'CodeCanyon':				2,
+					'VideoHive':				3,
+					'AudioJungle':				4,
+					'GraphicRiver':				5,
+					'PhotoDune':				6,
+					'3DOcean':					7,
+					'ActiveDen':				8,
+
+					'Other':					0		// For unknown values
 				}
 
 			},
@@ -582,7 +609,7 @@
 		 */
 
 		// Main content wrapper
-		wrapper = $( '<div class="envastats"></div>' ).insertBefore( '.content-l:first' ),
+		wrapper = $( '<div class="envastats"></div>' ).insertBefore( '.statement-search:first' ),
 
 		// Screens and blocks
 		screens = {
@@ -642,36 +669,43 @@
 	screens.initStatus = $( '<p class="envastats-loading">' + chrome.i18n.getMessage( 'loadingDatabase' ) + '</p>' ).appendTo( screens.init );
 	showScreen( screens.init );
 
-	// Setup tables
-	db = openDatabase( dbName, '1.0', 'Envastats database for ' + username, 5 * 1024 * 1024 );
-	db.transaction(function (tx)
-	{
-		//tx.executeSql( 'DROP TABLE IF EXISTS `statements`');
-		tx.executeSql( 'CREATE TABLE IF NOT EXISTS `statements` (' +
-		'  `date` DATETIME NOT NULL ,' +
-		'  `type` TINYINT(1) NOT NULL ,' +
-		'  `detail` VARCHAR(255) NULL ,' +
-		'  `item` INT NOT NULL ,' +
-		'  `amount` FLOAT(7,2) NOT NULL ,' +
-		'  `rate` FLOAT(4,1) NULL ,' +
-		'  `price` FLOAT(7,2) NULL,' +
-		'  `amount_converted` FLOAT(7,2) NOT NULL )' );
+	// Setup table
+	db = openDatabase( dbName, '', 'Envastats database for ' + username, 5 * 1024 * 1024 );
 
-	}, function ( e )
+	// Set table structure using migrations (web SQL versioning mechanism is broken)
+	M = new Migrator( db );
+	M.setDebugLevel( Migrator.DEBUG_HIGH );
+	M.migration( 1, function( tx )
 	{
-		// Couldn't create table
-		screens.initStatus.removeClass(' envastats-loading' ).text( chrome.i18n.getMessage( 'errorInitDatabase' ) );
-		console.log( 'Error while initializing database: ' + e.message );
+		tx.executeSql( 'DROP TABLE IF EXISTS `statements`' );
+		tx.executeSql( 'CREATE TABLE `statements` (' +
+						'  `date` DATETIME NOT NULL,' +
+						'  `type` TINYINT(1) NOT NULL,' +
+						'  `detail` VARCHAR(255) NULL,' +
+						'  `item` INT NULL,' +
+						'  `amount` FLOAT(7,2) NOT NULL,' +
+						'  `rate` FLOAT(4,1) NULL,' +
+						'  `price` FLOAT(7,2) NULL,' +
+						'  `site` TINYINT(1) NULL,' +
+						'  `amount_converted` FLOAT(7,2) NOT NULL )' );
 
-	}, function ()
+		// Force refresh
+		updateOnMigrate = true;
+	});
+
+	// Start when ready
+	M.whenDone(function ()
 	{
 		// Startup process
 		refreshStatementsTable( screens.initStatus, function()
 		{
 			finalizeInitialStatementRefresh( buildWidgetsScreen );
 
-		}, false );
+		}, updateOnMigrate );
 	});
+
+	// This executes the applicable transactions
+	M.execute();
 
 
 
@@ -687,14 +721,14 @@
 	function updateCoreDates()
 	{
 		// Update now
-		nowLocal   = new Date();
+		nowLocal = new Date();
 		now.setTime( nowLocal.getTime() + timeOffset );
 		library.options.now.change();
 
 		// Update today
 		if ( today.getDate() !== now.getDate() )
 		{
-			// Reset day of moth to prevent auto correction
+			// Reset day of month to prevent auto correction
 			today.setDate( 1 );
 
 			// Copy from now
@@ -720,15 +754,23 @@
 	}
 
 	/**
+	 * Get the database code of a statement type
+	 * @param string site the type name
+	 * @return int the internal code for the site
+	 */
+	function getStatementSiteCode( site )
+	{
+		return envato.statement.marketplaces[ site ] || 0;
+	}
+
+	/**
 	 * Finalize database initial update
 	 * @param function callback a function to call when complete
 	 * @return void
 	 */
 	function finalizeInitialStatementRefresh( callback )
 	{
-		var currency = library.options.currency.get(),
-			lastFinalizedMonth = library.options.lastFinalizedMonth.get(),
-			month, year;
+		var month, year;
 
 		// Message
 		screens.initStatus.text( 'Retrieving first sale...' );
@@ -740,7 +782,7 @@
 							' strftime(\'%m\', `date`) AS `month`,' +
 							' strftime(\'%Y\', `date`) AS `year`' +
 							' FROM `statements` WHERE `type`=? ORDER BY `date` ASC LIMIT 1',
-							[ getStatementTypeCode( 'sale' ) ],
+							[ getStatementTypeCode( 'Sale' ) ],
 							function ( tx, result )
 			{
 				var row;
@@ -960,7 +1002,7 @@
 	 * @param jQuery status the element to show progress status
 	 * @param function callback a function to call when complete
 	 * @param boolean reload use true to empty database and reload it
-	 * @return boolean
+	 * @return void
 	 */
 	function refreshStatementsTable( status, callback, reload )
 	{
@@ -977,10 +1019,12 @@
 				tx.executeSql( 'DELETE FROM `statements`', [], function ( tx, result )
 				{
 					console.log( 'Statement table has been truncated' );
+					refreshStatementsTable( status, callback, false );
 
 				}, function ( tx, e )
 				{
 					console.log( 'Error while truncating statements table: ' + e.message );
+					refreshStatementsTable( status, callback, false );
 				} );
 
 			} );
@@ -988,27 +1032,34 @@
 			// Clear cache
 			setStoredValue( 'last-month', false );
 			setStoredValue( 'last-year', false );
+
+			// Reset currency's last finalized month cache
+			library.options.lastFinalizedMonth.set( false );
+
+			// The transaction callbacks will trigger the fonction again
+			return;
 		}
 
 		// When shall we start loading
 		lastMonth = getStoredValue( 'last-month', false );
 		lastYear = getStoredValue( 'last-year', false );
 
-		// If never refresh (or reload is true), parse first available statement date
+		// If never refreshed (or reload is true), parse first available statement date
 		if ( lastMonth === false || !lastYear )
 		{
 			// Defaults
 			lastMonth = now.getMonth() + 1;
 			lastYear = now.getFullYear();
 
-			// Past statements links
-			$( '.sidebar-s .feature-list a[href^="/user/' + username + '/statement?month="]' ).first().each( function ()
+			// Earliest date
+			$( '.statement-search__advanced-type__period' ).filter('[data-earliest-date]').each( function ()
 			{
-				params = /month=([0-9]+)&year=([0-9]+)$/.exec( this.href );
+				params = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/.exec( $(this).data('earliest-date') );
 				if ( params )
 				{
-					lastMonth = parseInt( params[ 1 ], 10 );
-					lastYear = parseInt( params[ 2 ], 10 );
+					lastMonth = parseInt( params[ 2 ], 10 );
+					lastYear = parseInt( params[ 1 ], 10 );
+					console.log( 'Refreshing from earliest date : ' + lastMonth + '/' + lastYear );
 				}
 			} );
 		}
@@ -1086,7 +1137,7 @@
 	 */
 	function refreshMonthStatement( month, year, callback )
 	{
-		var url = '/user/' + username + '/download_statement_as_csv?month=' + month + '&year=' + year;
+		var url = '/statement/' + year + '-' + ( month > 9 ? month : '0' + month ) + '.csv?v=v1';
 
 		// Log
 		console.log( 'Refreshing ' + month + '/' + year );
@@ -1100,6 +1151,31 @@
 				var headers, columns = {}, i;
 
 				console.log( '* File downloaded' );
+
+				// Detect empty request
+				if ( !data || typeof data !== 'string' )
+				{
+					console.log( '* Empty response from server, abort refresh for ' + month + '/' + year );
+
+					// Callback
+					if ( callback )
+					{
+						callback.call();
+					}
+					return;
+				}
+				// Detect HTML error message
+				else if ( data.substr( 0, 1 ) === '<' )
+				{
+					console.log( '* Invalid response from server (probably updating), abort refresh for ' + month + '/' + year );
+
+					// Callback
+					if ( callback )
+					{
+						callback.call();
+					}
+					return;
+				}
 
 				// Parse
 				data = $.csv()( data );
@@ -1129,14 +1205,15 @@
 								var amount = parseFloat( this[ columns.amount ] ) || 0;
 
 								// Insert
-								tx.executeSql( 'INSERT INTO `statements` (`date`, `type`, `detail`, `item`, `amount`, `rate`, `price`, `amount_converted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
+								tx.executeSql( 'INSERT INTO `statements` (`date`, `type`, `detail`, `item`, `amount`, `rate`, `price`, `site`, `amount_converted`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
 									this[ columns.date ].substr( 0, 19 ),
 									getStatementTypeCode( this[ columns.type ] ),
-									( this[ columns.type ] === 'sale' ) ? '' : this[ columns.detail ],
-									this[ columns.item_id ],
+									( this[ columns.type ] === 'Sale' ) ? '' : this[ columns.detail ],
+									this[ columns.item_id ] || null,
 									amount,
 									parseFloat( this[ columns.rate ] ) || 0,
 									parseFloat( this[ columns.price ] ) || 0,
+									( this[ columns.site ] === '' ) ? null : getStatementSiteCode( this[ columns.site ] ),
 									amount
 								], function( tx, result ) {}, function ( tx, e )
 								{
@@ -1221,10 +1298,19 @@
 				}
 				updateDatabaseConvertedAmounts( currencyAlt, year, month, callback );
 			}
-			else
+			else if ( firstSale )
 			{
 				// Whole database refresh
-				setNewAltCurrency( currencyAlt, callback );
+				updateDatabaseConvertedAmounts( currencyAlt, firstSale.getFullYear(), firstSale.getMonth() + 1, callback );
+				//setNewAltCurrency( currencyAlt, callback );
+			}
+			else
+			{
+				// Callback
+				if ( callback )
+				{
+					callback();
+				}
 			}
 		}
 		else
@@ -3264,27 +3350,34 @@
 
 		// Global
 
-		globalStats:	new Request( 'globalStats',		'SELECT COUNT(*) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
-														'SUM(`amount_converted`) AS `totalAmountConverted`, SUM(`price`) AS `totalPrice` ' +
-														'FROM `statements` WHERE `type`=?',
-														[ getStatementTypeCode( 'sale' ) ],
+		globalStats:	new Request( 'globalStats',		'SELECT SUM(ABS(`amount`)/`amount`) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
+														'SUM(`amount_converted`) AS `totalAmountConverted`, SUM((ABS(`amount`)/`amount`)*`price`) AS `totalPrice` ' +
+														'FROM `statements` WHERE `type` IN (?, ?)',
+														[
+															getStatementTypeCode( 'Sale' ),
+															getStatementTypeCode( 'Sale Reversal' )
+														],
 														[ library.options.currency ] ),
 
 		globalRefCut:	new Request( 'globalRefCut',	'SELECT COUNT(*) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
 														'SUM(`amount_converted`) AS `totalAmountConverted` ' +
 														'FROM `statements` WHERE `type`=?',
-														[ getStatementTypeCode( 'referral_cut' ) ],
+														[ getStatementTypeCode( 'Referral Cut' ) ],
 														[ library.options.currency ] ),
 
 
 		// Monthly
 
-		monthStats:		new Request( 'monthStats',		'SELECT COUNT(*) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
-														'SUM(`amount_converted`) AS `totalAmountConverted`, SUM(`price`) AS `totalPrice` ' +
-														'FROM `statements` WHERE `type`=? AND `date`>=?',
+		monthStats:		new Request( 'monthStats',		'SELECT SUM(ABS(`amount`)/`amount`) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
+														'SUM(`amount_converted`) AS `totalAmountConverted`, SUM((ABS(`amount`)/`amount`)*`price`) AS `totalPrice` ' +
+														'FROM `statements` WHERE `type` IN (?, ?) AND `date`>=?',
 														function( options )
 														{
-															return [ getStatementTypeCode( 'sale' ), displayDate( getFirstDayOfMonth( options.today ), 'sqlDatetime' ) ];
+															return [
+																getStatementTypeCode( 'Sale' ),
+																getStatementTypeCode( 'Sale Reversal' ),
+																displayDate( getFirstDayOfMonth( options.today ), 'sqlDatetime' )
+															];
 														},
 														[ library.options.currency, library.options.today ] ),
 
@@ -3293,19 +3386,26 @@
 														'FROM `statements` WHERE `type`=? AND `date`>=?',
 														function( options )
 														{
-															return [ getStatementTypeCode( 'referral_cut' ), displayDate( getFirstDayOfMonth( options.today ), 'sqlDatetime' ) ];
+															return [
+																getStatementTypeCode( 'Referral Cut' ),
+																displayDate( getFirstDayOfMonth( options.today ), 'sqlDatetime' )
+															];
 														},
 														[ library.options.currency, library.options.today ] ),
 
 
 		// Weekly
 
-		weekStats:		new Request( 'weekStats',		'SELECT COUNT(*) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
-														'SUM(`amount_converted`) AS `totalAmountConverted`, SUM(`price`) AS `totalPrice` ' +
-														'FROM `statements` WHERE `type`=? AND `date`>=?',
+		weekStats:		new Request( 'weekStats',		'SELECT SUM(ABS(`amount`)/`amount`) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
+														'SUM(`amount_converted`) AS `totalAmountConverted`, SUM((ABS(`amount`)/`amount`)*`price`) AS `totalPrice` ' +
+														'FROM `statements` WHERE `type` IN (?, ?) AND `date`>=?',
 														function( options )
 														{
-															return [ getStatementTypeCode( 'sale' ), displayDate( getFirstDayOfWeek( options.today ), 'sqlDatetime' ) ];
+															return [
+																getStatementTypeCode( 'Sale' ),
+																getStatementTypeCode( 'Sale Reversal' ),
+																displayDate( getFirstDayOfWeek( options.today ), 'sqlDatetime' )
+															];
 														},
 														[ library.options.currency, library.options.today ] ),
 
@@ -3314,7 +3414,10 @@
 														'FROM `statements` WHERE `type`=? AND `date`>=?',
 														function( options )
 														{
-															return [ getStatementTypeCode( 'referral_cut' ), displayDate( getFirstDayOfWeek( options.today ), 'sqlDatetime' ) ];
+															return [
+																getStatementTypeCode( 'Referral Cut' ),
+																displayDate( getFirstDayOfWeek( options.today ), 'sqlDatetime' )
+															];
 														},
 														[ library.options.currency, library.options.today ] ),
 
@@ -3339,9 +3442,9 @@
 																format = '%Y-%m';
 															}
 
-															return 'SELECT strftime(\'' + format + '\', `date`) AS `date`, COUNT(*) AS `sales`, ' +
+															return 'SELECT strftime(\'' + format + '\', `date`) AS `date`, SUM(ABS(`amount`)/`amount`) AS `sales`, ' +
 																	'SUM(`amount`) AS `totalAmount`, SUM(`amount_converted`) AS `totalAmountConverted` FROM `statements` ' +
-																	'WHERE `type`=?' + parts.where +
+																	'WHERE `type` IN (?, ?)' + parts.where +
 																	'GROUP BY strftime(\'' + format + '\', `date`)';
 														},
 														getChartRangeRequestParams,
@@ -3351,9 +3454,9 @@
 														{
 															var parts = getChartRangeRequestParts( options );
 
-															return 'SELECT COUNT(*) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
-																	'SUM(`amount_converted`) AS `totalAmountConverted`, SUM(`price`) AS `totalPrice` ' +
-																	'FROM `statements` WHERE `type`=?' + parts.where;
+															return 'SELECT SUM(ABS(`amount`)/`amount`) AS `total`, SUM(`amount`) AS `totalAmount`, ' +
+																	'SUM(`amount_converted`) AS `totalAmountConverted`, SUM((ABS(`amount`)/`amount`)*`price`) AS `totalPrice` ' +
+																	'FROM `statements` WHERE `type` IN (?, ?)' + parts.where;
 														},
 														getChartRangeRequestParams,
 														[ library.options.today, library.options.chartRange, library.options.useChartRange, library.options.currency ] ),
@@ -3362,9 +3465,9 @@
 														{
 															var parts = getChartRangeRequestParts( options );
 
-															return 'SELECT `item`, COUNT(*) AS `sales`, SUM(`amount`) AS `totalAmount`, ' +
+															return 'SELECT `item`, SUM(ABS(`amount`)/`amount`) AS `sales`, SUM(`amount`) AS `totalAmount`, ' +
 																	'SUM(`amount_converted`) AS `totalAmountConverted` FROM `statements` ' +
-																	'WHERE `type`=?' + parts.where + ' GROUP BY `item` LIMIT 15';
+																	'WHERE `type` IN (?, ?)' + parts.where + ' GROUP BY `item` LIMIT 15';
 														},
 														getChartRangeRequestParams,
 														[ library.options.today, library.options.chartRange, library.options.useChartRange, library.options.currency ] ),
@@ -3373,8 +3476,8 @@
 														{
 															var parts = getChartRangeRequestParts( options );
 
-															return 'SELECT COUNT(*) AS `sales`, strftime(\'%w\', `date`) AS `day` FROM `statements` ' +
-																	'WHERE `type`=?' + parts.where + ' GROUP BY strftime(\'%w\', `date`)';
+															return 'SELECT SUM(ABS(`amount`)/`amount`) AS `sales`, strftime(\'%w\', `date`) AS `day` FROM `statements` ' +
+																	'WHERE `type` IN (?, ?)' + parts.where + ' GROUP BY strftime(\'%w\', `date`)';
 														},
 														getChartRangeRequestParams,
 														[ library.options.today, library.options.chartRange, library.options.useChartRange, library.options.currency ] ),
@@ -3383,8 +3486,8 @@
 														{
 															var parts = getChartRangeRequestParts( options );
 
-															return 'SELECT COUNT(*) AS `sales`, strftime(\'%H\', `date`) AS `hour` FROM `statements` ' +
-																	'WHERE `type`=?' + parts.where + ' GROUP BY strftime(\'%H\', `date`)';
+															return 'SELECT SUM(ABS(`amount`)/`amount`) AS `sales`, strftime(\'%H\', `date`) AS `hour` FROM `statements` ' +
+																	'WHERE `type` IN (?, ?)' + parts.where + ' GROUP BY strftime(\'%H\', `date`)';
 														},
 														getChartRangeRequestParams,
 														[ library.options.today, library.options.chartRange, library.options.useChartRange, library.options.currency ] )
@@ -3436,11 +3539,11 @@
 				startDate = getFirstDayOfMonth( startDate );
 			}
 
-			return [ getStatementTypeCode( 'sale' ), displayDate( startDate, 'sqlDatetime' ) ];
+			return [ getStatementTypeCode( 'Sale' ), getStatementTypeCode( 'Sale Reversal' ), displayDate( startDate, 'sqlDatetime' ) ];
 		}
 		else
 		{
-			return [ getStatementTypeCode( 'sale' ) ];
+			return [ getStatementTypeCode( 'Sale' ), getStatementTypeCode( 'Sale Reversal' ) ];
 		}
 	}
 
@@ -3736,7 +3839,7 @@
 										this.vars.items[ 'item' + row.item ].addSubscriber( this );
 									}
 									itemData = this.vars.items[ 'item' + row.item ].get();
-									itemName = itemData ? itemData.item.item : row.item;
+									itemName = ( itemData && itemData.item && itemData.item.item ) ? itemData.item.item : row.item;
 									if ( itemName.length > 30 )
 									{
 										itemName = itemName.substr( 0, 30 ) + '…';
@@ -5118,7 +5221,7 @@
 	 * @param string thousands_sep
 	 * @return string
 	 */
-	function number_format ( number, decimals, dec_point, thousands_sep )
+	function number_format( number, decimals, dec_point, thousands_sep )
 	{
 		number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
 		var n = !isFinite(+number) ? 0 : +number,
@@ -5150,7 +5253,7 @@
 	 * @param string pad_type
 	 * @return string
 	 */
-	function str_pad ( input, pad_length, pad_string, pad_type )
+	function str_pad( input, pad_length, pad_string, pad_type )
 	{
 		var half = '',
 			pad_to_go;

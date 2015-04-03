@@ -1,6 +1,6 @@
 {
 	"name"            : "__MSG_extensionName__",
-	"version"         : "1.0.6",
+	"version"         : "1.2.1",
 	"manifest_version": 2,
 	"description"     : "__MSG_extensionDesc__",
 	"default_locale"  : "en",
@@ -8,9 +8,6 @@
 		"16"          : "img/logo-16.png",
 		"48"          : "img/logo-48.png",
 		"128"         : "img/logo-128.png"
-	},
-	"browser_action"  : {
-		"default_icon": "img/logo-16.png"
 	},
 	"content_scripts": [
 		{
@@ -25,7 +22,7 @@
 				"*://photodune.net/*"
 			],
 			"include_globs": [
-				"*://*/user/*/statement*"
+				"*://*/statement"
 			],
 			"css": [
 				"css/style.css"
@@ -36,6 +33,7 @@
 				"js/elycharts.min.js",
 				"js/jquery.csv.js",
 				"js/tooltip.js",
+				"js/migrator.js",
 				"js/script.js"
 			]
 		}
