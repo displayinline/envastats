@@ -111,31 +111,31 @@
 
 				// Type codes, used to save storing space in DB
 				types: {
-					'Sale':						1,
-					'Withdrawal Request':		2,
-					'Referral Cut':				3,
-					'Deposit':					4,
-					'Purchase':					5,
-					'Withdrawal Cancellation':	6,
-					'Sale Reversal':			7,
-					'Marketing':				8,
-					'Manual Adjustment':		9,
+					'Sale':					1,
+					'Withdrawal Request':	2,
+					'Referral Cut':			3,
+					'Deposit':				4,
+					'Purchase':				5,
+					'Refund':				6,		// Not sure of this one
+					'Sale Reversal':		7,
+					'Marketing':			8,
+					'Manual Adjustment':	9,
 
-					'Other':					0		// For unknown types
+					'Other':				0		// For unknown types
 				},
 
 				// Envato marketplaces
 				marketplaces: {
-					'ThemeForest':				1,
-					'CodeCanyon':				2,
-					'VideoHive':				3,
-					'AudioJungle':				4,
-					'GraphicRiver':				5,
-					'PhotoDune':				6,
-					'3DOcean':					7,
-					'ActiveDen':				8,
+					'ThemeForest':			1,
+					'CodeCanyon':			2,
+					'VideoHive':			3,
+					'AudioJungle':			4,
+					'GraphicRiver':			5,
+					'PhotoDune':			6,
+					'3DOcean':				7,
+					'ActiveDen':			8,
 
-					'Other':					0		// For unknown values
+					'Other':				0		// For unknown values
 				}
 
 			},
